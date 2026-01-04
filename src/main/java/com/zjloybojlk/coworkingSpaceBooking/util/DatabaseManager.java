@@ -28,25 +28,52 @@ public class DatabaseManager {
     }
 
     public static void initializeDataBase() throws SQLException {
-        try (Connection conn = getConnection();
-             Statement stmt = conn.createStatement()) {
+        try (Connection conn = getConnection(); Statement stmt = conn.createStatement()) {
 
             stmt.execute("""
-                CREATE TABLE IF NOT EXISTS users (
-                    id SERIAL PRIMARY KEY,
-                    name VARCHAR(50) UNIQUE NOT NULL,
-                    password VARCHAR(255) NOT NULL,
-                    email VARCHAR(100) UNIQUE NOT NULL,
-                    phone VARCHAR(20),
-                    role VARCHAR(20) DEFAULT 'USER',
-                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-                )
-            """);
+                        CREATE TABLE IF NOT EXISTS users (
+                            id SERIAL PRIMARY KEY,
+                            name VARCHAR(50) UNIQUE NOT NULL,
+                            password VARCHAR(255) NOT NULL,
+                            email VARCHAR(100) UNIQUE NOT NULL,
+                            phone VARCHAR(20),
+                            role VARCHAR(20) DEFAULT 'USER',
+                            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                        )
+                    """);
 
-            //todo desks and bookings
+            stmt.execute("""
+                    CREATE TABLE IF NOT EXISTS desks (
+                        id SERIAL PRIMARY KEY,
+                        deskNumber VARCHAR(10) UNIQUE NOT NULL,
+                        description VARCHAR(255),
+                        type VARCHAR(20) DEFAULT 'STANDARD',
+                        pricePerHour DECIMAL(10,2) NOT NULL,
+                        isOccupied BOOLEAN DEFAULT TRUE,
+                        createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                    )""");
+
+            stmt.execute("""
+                    CREATE TABLE IF NOT EXISTS bookings (
+                    id SERIAL PRIMARY KEY,
+                    userId INTEGER NOT NULL REFERENCES users(id),
+                    deskId INTEGER NOT NULL REFERENCES desks(id),
+                    startTime TIMESTAMP NOT NULL,
+                    endTime TIMESTAMP NOT NULL,
+                    totalPrice DECIMAL(10,2),
+                    status VARCHAR(20) DEFAULT 'ACTIVE',
+                    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                    CONSTRAINT valid_time CHECK (end_time > start_time)
+)
+                    """);
 
         }
     }
 
-    // add closeConnectionMethod
+    public static void closeConnection() throws SQLException {
+        if (connection != null) {
+            connection.close();
+        }
+
+    }
 }
