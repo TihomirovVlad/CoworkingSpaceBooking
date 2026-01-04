@@ -1,6 +1,7 @@
 package com.zjloybojlk.coworkingSpaceBooking.entity;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 public class Booking {
@@ -35,6 +36,7 @@ public class Booking {
     public Integer getId() {
         return id;
     }
+
     public void setId(Integer id) {
         this.id = id;
     }
@@ -42,6 +44,7 @@ public class Booking {
     public int getUserId() {
         return userId;
     }
+
     public void setUserId(int userId) {
         this.userId = userId;
     }
@@ -49,6 +52,7 @@ public class Booking {
     public int getDeskId() {
         return deskId;
     }
+
     public void setDeskId(int deskId) {
         this.deskId = deskId;
     }
@@ -56,6 +60,7 @@ public class Booking {
     public LocalDateTime getStartTime() {
         return startTime;
     }
+
     public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;
     }
@@ -63,6 +68,7 @@ public class Booking {
     public LocalDateTime getEndTime() {
         return endTime;
     }
+
     public void setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;
     }
@@ -70,6 +76,7 @@ public class Booking {
     public BigDecimal getTotalPrice() {
         return totalPrice;
     }
+
     public void setTotalPrice(BigDecimal totalPrice) {
         this.totalPrice = totalPrice;
     }
@@ -77,6 +84,7 @@ public class Booking {
     public String getStatus() {
         return status;
     }
+
     public void setStatus(String status) {
         this.status = status;
     }
@@ -84,6 +92,7 @@ public class Booking {
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
+
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
@@ -91,6 +100,7 @@ public class Booking {
     public User getUser() {
         return user;
     }
+
     public void setUser(User user) {
         this.user = user;
     }
@@ -98,10 +108,31 @@ public class Booking {
     public Desk getDesk() {
         return desk;
     }
+
     public void setDesk(Desk desk) {
         this.desk = desk;
     }
 
-    // add long getDurationInHours(), boolean isActive(), completed, cancelled
-    // getFormattedDuration ( 1 hour; 2,3,4, ... n hour(s))
+    public long getDurationInHours() {
+        if (startTime == null || endTime == null) return 0;
+        return Duration.between(startTime, endTime).toHours();
+    }
+
+    public boolean isActive() {
+        return status.equals("ACTIVE");
+    }
+
+    public boolean isCompleted() {
+        return status.equals("COMPLETED");
+    }
+
+    public boolean isCancelled() {
+        return status.equals("CANCELLED");
+    }
+
+    public String getFormattedDuration() {
+
+        long duration = getDurationInHours();
+        return duration + "hour" + (duration > 1 ? "s" : "");
+    }
 }
