@@ -26,6 +26,66 @@ public class Desk {
         this.pricePerHour = pricePerHour;
     }
 
-    //add String getOccupiedStatus,String getFormattedPrice, getters/setters, toString
+    public String getDeskNumber() {
+        return deskNumber;
+    }
+
+    public void setDeskNumber(String deskNumber) {
+        this.deskNumber = deskNumber;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public BigDecimal getPricePerHour() {
+        return pricePerHour;
+    }
+
+    public void setPricePerHour(BigDecimal pricePerHour) {
+        this.pricePerHour = pricePerHour;
+    }
+
+    public Boolean getOccupied() {
+        return isOccupied;
+    }
+
+    public void setOccupied(Boolean occupied) {
+        isOccupied = occupied;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public String getOccupiedStatus() {
+        return isOccupied ? "Occupied" : "Free";
+    }
+    public String getFormattedPrice(){
+
+        return pricePerHour + "rub/hour";
+    }
+
+    @Override
+    public String toString() {
+        return "Desk #" + deskNumber + " - " + description +
+                " (" + getFormattedPrice() + ", " + getOccupiedStatus() + ")";
+    }
 
 }
